@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>gitHubDemo</title>
+    <meta name="viewport" content="width=device-width">
     <link rel="ICON" href="./favicon.ico" type="image/x-icon">
+    <style type="text/css">
+    html,body{margin:0;padding:0;}
+    body{margin:0 auto;font-size:16px;}
+    .nav{height:200px;width:100%;background:#000;position:relative;}
+    .nav img{width:16%;height:auto;max-width:100px;position:absolute;left:5%;top:50%;transform:translateY(-50%);-webkit-transform:translateY(-50%);border-radius:10px;animation:big 1.5s infinite alternate ease-in-out;-webkit-animation:big 1.5s infinite alternate ease-in-out;}
+    @keyframes big {from{transform:translateY(-50%) scale(0.9);}to{transform:translateY(-50%) scale(1.0);}}
+    @-webkit-keyframes big {from{transform:translateY(-50%) scale(0.9);}to{transform:translateY(-50%) scale(1.0);}}
+	.nav h1{height:200px;margin:0;padding-left:25%;color:#fff;line-height:200px;}
+	.section{padding-left:20px;padding-top:40px;}
+    </style>
 </head>
 <body>
-<h1>仅供娱乐</h1>
+<nav class="nav">
+	<img src="app/res/images/photo.jpg">
+	<h1>仅供娱乐</h1>
+</nav>
+<section class="section">
+<a href="app/requireJsDemo/">requireJs的相关练习</a>
+</section>
 </body>
 </html>
