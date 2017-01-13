@@ -1,8 +1,9 @@
 define(function(require) {
     var template = require("text!./welcome.template.html"),
         model = require("./welcome.model"),
-        Base = require("../base");
-    store = require("js/store");
+        Base = require("../base"),
+        store = require("js/store"),
+        action = require("js/action");
     var base = new Base("welcome");
 
     function load() {
@@ -26,7 +27,7 @@ define(function(require) {
     }
 
     function run() {
-        store.dispatch({ type: "URL", payload: { url: "welcome" } });
+        store.dispatch(action.updateUrl("welcome"));
     }
     return {
         load: load

@@ -1,20 +1,24 @@
-define(["redux.min","lodash.min"],function(redux,_){
-	debugger;
-	var defaultState = {
-		url:"home"
-	};
+define(["redux.min", "lodash.min"], function(redux, _) {
+    var defaultState = {
+        url: "home",
+        locale: "en"
+    };
 
-	function allAction(state,action){
-		switch (action.type){
-			case "URL":
-				var newState = _.cloneDeep(state);
-				newState.url = action.payload.url;
-				return newState;
-			default:
-				return state;
-		}
-	}
+    function allAction(state, action) {
+        if(!state)return;
+        var newState = _.cloneDeep(state);
+        switch (action.type) {
+            case "URL":
+                newState.url = action.payload.url;
+                return newState;
+            case "LANG":
+                newState.locale = action.payload.locale;
+                return newState;
+            default:
+                return state;
+        }
+    }
 
-	var store = redux.createStore(allAction,defaultState);
-	return store;
+    var store = redux.createStore(allAction, defaultState);
+    return store;
 });
