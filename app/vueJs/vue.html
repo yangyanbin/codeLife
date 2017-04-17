@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<div id="app">
+<input type="text" v-model="message">
+<button @click="alertName">alert</button>
+<span @click="alertSpan('元素: ',$event)">{{message | up}}</span>
+</div>
+
+<script type="text/javascript" src="../res/js/vue.js"></script>
+<script type="text/javascript">
+var app = new Vue({
+	el:"#app",
+	data:{
+		message:"yyb"
+	},
+	methods:{
+		alertName:function(event){
+			var msg = this.message.charAt(0).toUpperCase()+this.message.slice(1);
+			alert(msg);
+		},
+		alertSpan:function(str,event){
+			alert(str+event.target.tagName);
+		}
+	},
+	filters:{
+		up:function(value){
+			if(!value)return "";
+			return value.toUpperCase();
+		}
+	}
+});
+</script>
+</body>
+</html>

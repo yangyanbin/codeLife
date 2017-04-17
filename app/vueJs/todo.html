@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Todo List</title>
+    <meta charset="utf-8">
+    <style>
+    ul li i {
+        margin-left: 20px;
+        color: red;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <nav>
+            <input type="text" name="item" v-model="item">
+            <button @click="add">Add</button>
+            <clear @clear="clearTodo"></clear>
+        </nav>
+        <section>
+            <ul @click="del">
+                <!-- <li v-for="(todo,index) in todos">{{todo}}<i :data-index="index">X</i></li> -->
+                <todo-item v-for="(todo,index) in todos" :todo="todo" :index="index"  :key="index"></todo-item>
+            </ul>
+        </section>
+    </div>
+    <script type="text/javascript" src="../res/js/vue.js"></script>
+    <script type="text/javascript">
+
+    var app = new Vue({
+        el: "#app",
+        data: {
+            item: "",
+            todos: [
+                "todo one"
+            ]
+        },
+        methods: {
+            add: function() {
+                if (!this.item.trim()) return;
+                this.todos.push(this.item);
+            },
+            del: function(event) {
+                var target = event.target;
+                if (target.tagName == "I") {
+                    var index = target.getAttribute("data-index");
+                    this.todos.splice(index, 1);
+                }
+            },
+            clearTodo: function(){
+            	this.todos = [];
+            }
+        },
+        filters: {
+
+        },
+        components: {
+    		"clear":{
+    			template:'<button @click="clear">Clear</button>',
+	    		methods:{
+	    			clear:function(){
+	    				this.$emit("clear");
+	    			}
+	    		}
+    		}
+        }
+    });
+    </script>
+</body>
+
+</html>
