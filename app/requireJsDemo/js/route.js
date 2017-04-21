@@ -1,5 +1,10 @@
 define(function() {
+    //禁止浏览器后退功能
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     window.addEventListener("hashchange", function(e) {
+        history.pushState(null, null, document.URL);
         run(true);
     });
 

@@ -2,7 +2,7 @@ define(function(require) {
     var template = require("text!./home.template.html"),
         model = require("./home.model"),
         Base = require("../base"),
-        language = require("i18n!./nls/language"),
+        language = require("i18n!rd/nls/language"),
         store = require("js/store"),
         action = require("js/action");
     var base = new Base("home");
