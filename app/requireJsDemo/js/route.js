@@ -20,7 +20,7 @@ define(function() {
         if (!bl) {
             return;
         }
-        var url = getPagePath();
+        var url = getPagePath()||"welcome";
         var path = "view/" + url + "/" + url;
         require([path], function(view) {
             view.load();

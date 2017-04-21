@@ -6,7 +6,7 @@ requirejs.config({
         view: "../../requireJsDemo/views/"
     },
     config:{
-    	//指定一种语言
+    	//指定一种本地化语言
     	i18n:{
     		locale:"en-us"
     	}
