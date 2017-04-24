@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue Demo</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	header a{
+		margin-right:20px;
+	}
+	</style>
+</head>
+<body>
+<div id="app">
+	<header>
+		<router-link to="/home">Home</router-link>
+		<router-link to="/menu">Menu</router-link>
+		<router-link to="/404">Other</router-link>
+	</header>
+	<router-view></router-view>
+</div>
+<script type="text/javascript" src="../../res/js/vue.js"></script>
+<script type="text/javascript" src="../../res/js/vuex.min.js"></script>
+<script type="text/javascript" src="../../res/js/vue-router.min.js"></script>
+<script type="text/javascript" src="./router.js"></script>
+<script type="text/javascript" src="./index.js"></script>
+</body>
+</html>

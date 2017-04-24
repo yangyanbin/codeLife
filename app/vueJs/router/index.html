@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<header>
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#help">Help</a>
+</header>
+<div id="app">
+<component :is="currentView"></component>
+</div>
+
+<script type="text/javascript" src="../../res/js/vue.js"></script>
+<script type="text/javascript" src="./app.js"></script>
+</body>
+</html>

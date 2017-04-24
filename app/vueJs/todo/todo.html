@@ -9,24 +9,41 @@
         margin-left: 20px;
         color: red;
     }
+    .done{
+        text-decoration:line-through;
+    }
+    .done i{
+        text-decoration:none;
+    }
+    .todos-item {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .todos-enter-active, .todos-leave-active {
+      transition: all 0.5s;
+    }
+    .todos-enter, .todos-leave-active {
+      opacity: 0;
+      transform: translateY(-15px) scaleY(0.5);
+    }
     </style>
 </head>
 
 <body>
     <div id="app">
         <nav>
-            <input type="text" name="item" v-model="item">
+            <input type="text" name="item" v-model="item" @keyup.enter="add">
             <button @click="add">Add</button>
             <clear @clear="clearTodo"></clear>
         </nav>
-        <section>
-            <ul @click="del">
-                <!-- <li v-for="(todo,index) in todos">{{todo}}<i :data-index="index">X</i></li> -->
-                <todo-item v-for="(todo,index) in todos" :todo="todo" :index="index"  :key="index"></todo-item>
-            </ul>
+        <section @click="del">
+            <transition-group name="todos" tag="ul">
+                <li is="todo-item" v-for="(todo,index) in todos" :todo="todo" :index="index"  :key="index"></li>
+            </transition-group>
         </section>
     </div>
     <script type="text/javascript" src="../res/js/vue.js"></script>
+    <script type="text/javascript" src="./todoItem.js"></script>
     <script type="text/javascript">
 
     var app = new Vue({
