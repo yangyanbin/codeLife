@@ -49,6 +49,7 @@
         t1.setSelectionRange(0, t1.value.length);
         // var text = window.getSelection().toString();
         var isSucc = document.execCommand("copy", true);
+        copyBtn.focus();
         console.log("拷贝结果 " + isSucc);
     }
     //ie生效,chrome不兼容
@@ -61,6 +62,7 @@
     //主动拷贝时给拷贝内容加工
     document.addEventListener("copy", function(e) {
         if (window.clipboardData && window.clipboardData.getData) {
+            //需要setTimeout切换执行栈，否则text为null
             setTimeout(function() {
                 var text = window.clipboardData.getData("Text");
                 window.clipboardData.setData("Text", text + bq);
