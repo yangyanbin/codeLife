@@ -42,3 +42,13 @@ router.beforeEach(function(to,from,next){
 	}
 	next();
 });
+/*router.afterEach(function(route){
+	if(route.path=="/404"){
+		store.commit("changeHash","......");
+		setTimeout(function(){
+			store.dispatch("changeHashAsync",route.path);
+		},2000);
+	}else{
+		store.commit("changeHash",route.path);
+	}
+});*/

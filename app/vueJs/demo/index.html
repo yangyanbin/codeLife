@@ -7,6 +7,12 @@
 	header a{
 		margin-right:20px;
 	}
+	.view-enter-active, .view-leave-active {
+	  transition: opacity .5s
+	}
+	.view-enter, .view-leave-to /* .fade-leave-active in <2.1.8 */ {
+	  opacity: 0
+	}
 	</style>
 </head>
 <body>
@@ -16,7 +22,9 @@
 		<router-link to="/menu">Menu</router-link>
 		<router-link to="/404">Other</router-link>
 	</header>
-	<router-view></router-view>
+	<transition name="view" mode="out-in">
+		<router-view></router-view>
+	</transition>
 </div>
 <script type="text/javascript" src="../../res/js/vue.js"></script>
 <script type="text/javascript" src="../../res/js/vuex.min.js"></script>
