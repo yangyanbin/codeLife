@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>剪切板</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+    textarea {
+        min-width: 200px;
+        min-height: 300px
+    }
+    </style>
+</head>
+
+<body>
+    <h1>需要手动选择区域</h1>
+    <section>
+        <textarea id="t1">将要复制的内容 test</textarea>
+        <button id="copy">copy</button>
+        <button id="paste">paste</button>
+        <textarea id="t2" placeholder="粘贴区域"></textarea>
+    </section>
+    <script>
+    var copyBtn = document.querySelector("#copy");
+    var pasteBtn = document.querySelector("#paste");
+    var t1 = document.querySelector("#t1");
+    var t2 = document.querySelector("#t2");
+    var bq = "@yyb";
+
+    copyBtn.addEventListener("click", copy);
+    pasteBtn.addEventListener("click", paste);
+
+    function paste() {
+        t2.focus();
+        var isSucc = document.execCommand("paste");
+        alert("粘贴结果 " + isSucc);
+    }
+
+    function copy() {
+        if (window.clipboardData && window.clipboardData.getData) {
+            copyType2();
+        } else {
+            copyType1();
+        }
+    }
+
+    function copyType1() {
+        t1.focus();
+        t1.setSelectionRange(0, t1.value.length);
+        // var text = window.getSelection().toString();
+        var isSucc = document.execCommand("copy", true);
+        console.log("拷贝结果 " + isSucc);
+    }
+    //ie生效,chrome不兼容
+    function copyType2() {
+        var text = t1.value;
+        var bl = window.clipboardData.setData("Text", text + bq);
+        console.log("拷贝结果 " + bl);
+    }
+
+    //主动拷贝时给拷贝内容加工
+    document.addEventListener("copy", function(e) {
+        if (window.clipboardData && window.clipboardData.getData) {
+            setTimeout(function() {
+                var text = window.clipboardData.getData("Text");
+                window.clipboardData.setData("Text", text + bq);
+            }, 100);
+        } else {
+            createTempDom();
+        }
+    });
+
+    function createTempDom() {
+        if (document.getSelection) {
+            var div = document.createElement("div");
+            div.style.cssText = "position:fixed;left:-9999px;";
+            document.body.appendChild(div);
+            div.innerHTML = document.getSelection() + "" + bq;
+            document.getSelection().selectAllChildren(div);
+
+            setTimeout(function() {
+                document.body.removeChild(div);
+            }, 200);
+        }
+    }
+    </script>
+</body>
+
+</html>
