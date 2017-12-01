@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>华容道</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<style type="text/css">
+	html,body{margin:0;padding:0;width:100vw;height:100vh;background:#666;}
+	header{height:50px;}
+	h2{text-align:center;}
+	.gameContent{width:80vw;margin:0 auto;position:relative;background:#bdbdbd;border:2px solid #005810;box-sizing:border-box;}
+	.gameContent:before{content:"";display:block;width:100%;padding-bottom:125%;}
+	.gameContent:after{content:"";display:block;position:absolute;width:50%;height:8px;background:#fff;left:25%;bottom:-8px;}
+	.zhangfei,.caocao,.zhaoyun,.machao,.guanyu,.huangzhong,.xiaobing{position:absolute;box-sizing:border-box;border:1px solid #fff;transition:all 0.2s;}
+	.caocao{width:50%;padding-bottom:50%;background:#000;}
+	.zhangfei{width:25%;padding-bottom:50%;background:#716969;}
+	.huangzhong{width:25%;padding-bottom:50%;background:#d0c034;}
+	.guanyu{width:50%;padding-bottom:25%;background:#e83f16;}
+	.machao{width:25%;padding-bottom:50%;background:#86d895;}
+	.zhaoyun{width:25%;padding-bottom:50%;background:#d886b7;}
+	.xiaobing{width:25%;padding-bottom:25%;background:#655757;}
+	.select{z-index:1;transform:scale(0.95);box-shadow: 2px 2px 4px #000;}
+
+	/*横刀立马*/
+	.caocao{top:0;left:25%;}
+	.zhangfei{top:0;left:0;}
+	.zhaoyun{top:0;left:75%;}
+	.machao{top:40%;left:0;}
+	.guanyu{top:40%;left:25%;}
+	.huangzhong{top:40%;left:75%;}
+	.xb1{top:60%;left:25%;}
+	.xb2{top:60%;left:50%;}
+	.xb3{top:80%;left:0;}
+	.xb4{top:80%;left:75%;}
+
+	</style>
+</head>
+<body>
+<header></header>
+<div class="gameContent">
+	<div data-value="caocao" class="caocao"></div>
+	<div class="zhangfei"></div>
+	<div class="guanyu"></div>
+	<div class="huangzhong"></div>
+	<div class="machao"></div>
+	<div class="zhaoyun"></div>
+	<div class="xiaobing xb1"></div>
+	<div class="xiaobing xb2"></div>
+	<div class="xiaobing xb3"></div>
+	<div class="xiaobing xb4"></div>
+</div>
+<h2>横刀立马</h2>
+<script type="text/javascript">
+function $(selector){
+	return document.querySelector(selector);
+}
+function select(dom){
+	$(".select")&&$(".select").classList.remove("select");
+	dom.classList.add("select"); 
+}
+function filter(e){
+	var result = {
+		moveAble:false
+	};
+	var moveDom = $(".select");
+	var mouseX = e.clientX;
+	var mouseY = e.clientY;
+	var moveDomX_max = moveDom.offsetLeft+moveDom.offsetWidth;
+	var moveDomX_min = moveDom.offsetLeft;
+	var moveDomY_max = moveDom.offsetTop+moveDom.offsetHeight;
+	var moveDomY_min = moveDom.offsetTop;
+	if(moveDom){
+		if(mouseX<moveDomX_min&&mouseY<moveDomY_max&&mouseY>moveDomY_min){
+			result.moveAble = true;
+			result.dir = "left";
+			return result;
+		}
+		if(mouseX>moveDomX_max&&mouseY<moveDomY_max&&mouseY>moveDomY_min){
+			result.moveAble = true;
+			result.dir = "right";
+			return result;
+		}
+		if(mouseY<moveDomY_min&&mouseX<moveDomX_max&&mouseX>moveDomX_min){
+			result.moveAble = true;
+			result.dir = "up";
+			return result;
+		}
+		if(mouseY>moveDomY_max&&mouseX<moveDomX_max&&mouseX>moveDomX_min){
+			result.moveAble = true;
+			result.dir = "down";
+			return result;
+		}
+	}
+	return result;
+}
+function move(e){
+	var action = filter(e);
+	console.log(action);
+	var moveDom = $(".select");
+	var len = $(".gameContent").offsetHeight/5;
+	if(action.moveAble){
+		switch(action.dir){
+			case "up":
+				moveDom.style.top = moveDom.offsetTop-len+"px";
+				break;
+			case "right":
+				moveDom.style.left = moveDom.offsetLeft+len+"px";
+				break;
+			case "down":
+				moveDom.style.top = moveDom.offsetTop+len+"px";
+				break;
+			case "left":
+				moveDom.style.left = moveDom.offsetLeft-len+"px";
+				break;
+		}
+	}
+} 
+$(".gameContent").addEventListener("click",function(e){
+	var target = e.target;
+	if(target.className!=="gameContent"){
+		select(target);
+	}else{
+		move(e);
+	}
+},true);
+</script>
+</body>
+</html>
