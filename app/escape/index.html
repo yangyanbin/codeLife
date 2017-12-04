@@ -19,7 +19,7 @@
 	.machao{width:25%;padding-bottom:50%;background:#86d895;}
 	.zhaoyun{width:25%;padding-bottom:50%;background:#d886b7;}
 	.xiaobing{width:25%;padding-bottom:25%;background:#655757;}
-	.select{z-index:1;transform:scale(0.95);box-shadow: 2px 2px 4px #000;}
+	.select{z-index:1;transform:scale(1.05);box-shadow: 2px 2px 4px #000;}
 
 	/*横刀立马*/
 	.caocao{top:0;left:25%;}
@@ -33,24 +33,101 @@
 	.xb3{top:80%;left:0;}
 	.xb4{top:80%;left:75%;}
 
+	/*方向*/
+	.up,.down,.left_right{text-align: center}
+	.middle{visibility: hidden;}
 	</style>
 </head>
 <body>
 <header></header>
 <div class="gameContent">
-	<div data-value="caocao" class="caocao"></div>
-	<div class="zhangfei"></div>
-	<div class="guanyu"></div>
-	<div class="huangzhong"></div>
-	<div class="machao"></div>
-	<div class="zhaoyun"></div>
-	<div class="xiaobing xb1"></div>
-	<div class="xiaobing xb2"></div>
-	<div class="xiaobing xb3"></div>
-	<div class="xiaobing xb4"></div>
+	<div id="caocao" data-value="caocao" class="caocao"></div>
+	<div id="zhangfei" class="zhangfei"></div>
+	<div id="guanyu" class="guanyu"></div>
+	<div id="huangzhong" class="huangzhong"></div>
+	<div id="machao" class="machao"></div>
+	<div id="zhaoyun" class="zhaoyun"></div>
+	<div id="jia" class="xiaobing xb1"></div>
+	<div id="yi" class="xiaobing xb2"></div>
+	<div id="bing" class="xiaobing xb3"></div>
+	<div id="ding" class="xiaobing xb4"></div>
 </div>
 <h2>横刀立马</h2>
+<section id="operation">
+	<div class="up"><button id="up">上</button></div>
+	<div class="left_right"><button id="left">左</button><button class="middle">中</button><button id="right">右</button></div>
+	<div class="down"><button id="down">下</button></div>
+</section>
 <script type="text/javascript">
+var success = {
+	hengdaolima:{
+		X:0,
+		Y:150
+	}
+};
+var isSuccess = false;
+var position = {
+	caocao:{
+		X:0,
+		Y:0,
+		moveX:50,
+		moveY:50,
+	},
+	guanyu:{
+		X:0,
+		Y:0,
+		moveX:50,
+		moveY:100,
+	},
+	huangzhong:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:50,
+	},
+	zhangfei:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:50,
+	},
+	machao:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:50,
+	},
+	zhaoyun:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:50,
+	},
+	jia:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:100,
+	},
+	yi:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:100,
+	},
+	bing:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:100,
+	},
+	ding:{
+		X:0,
+		Y:0,
+		moveX:100,
+		moveY:100,
+	}
+};
 function $(selector){
 	return document.querySelector(selector);
 }
@@ -93,34 +170,55 @@ function filter(e){
 	}
 	return result;
 }
-function move(e){
-	var action = filter(e);
-	console.log(action);
+function move(id){
 	var moveDom = $(".select");
-	var len = $(".gameContent").offsetHeight/5;
-	if(action.moveAble){
-		switch(action.dir){
+	var positionItem = position[moveDom.id];
+	var value = 0;
+	if(moveDom){
+		switch(id){
 			case "up":
-				moveDom.style.top = moveDom.offsetTop-len+"px";
+				value = positionItem.Y-positionItem.moveY;
+				moveDom.style.transform = "translate("+positionItem.X+"%,"+value+"%)";
+				positionItem.Y = value;
 				break;
 			case "right":
-				moveDom.style.left = moveDom.offsetLeft+len+"px";
+				value = positionItem.X+positionItem.moveX;
+				moveDom.style.transform = "translate("+value+"%,"+positionItem.Y+"%)";
+				positionItem.X = value;
 				break;
 			case "down":
-				moveDom.style.top = moveDom.offsetTop+len+"px";
+				value = positionItem.Y+positionItem.moveY;
+				moveDom.style.transform = "translate("+positionItem.X+"%,"+value+"%)";
+				positionItem.Y = value;
 				break;
 			case "left":
-				moveDom.style.left = moveDom.offsetLeft-len+"px";
+				value = positionItem.X-positionItem.moveX;
+				moveDom.style.transform = "translate("+value+"%,"+positionItem.Y+"%)";
+				positionItem.X = value;
 				break;
 		}
+		checkFinish("hengdaolima");
+	}
+}
+function checkFinish(type){
+	var caocao = position.caocao;
+	if(caocao.X===success[type].X&&caocao.Y===success[type].Y){
+		isSuccess = true;
+		setTimeout(function(){
+			alert("逃出生天");
+		},200);
 	}
 } 
 $(".gameContent").addEventListener("click",function(e){
 	var target = e.target;
 	if(target.className!=="gameContent"){
 		select(target);
-	}else{
-		move(e);
+	}
+},true);
+$("#operation").addEventListener("click",function(e){
+	var target = e.target;
+	if(target.tagName==="BUTTON"&&!isSuccess){
+		move(target.id);
 	}
 },true);
 </script>
