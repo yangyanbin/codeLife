@@ -3,14 +3,18 @@
 <head>
 	<title>H5华容道</title>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
 	<style type="text/css">
 	html,body{margin:0;padding:0;width:100%;height:100vh;}
 	header{padding-top:1px;}
 	header h2{text-align:center;}
-	.canvasDiv{text-align:center;}
+	.canvasDiv{text-align:center;width:100%;overflow-x:hidden;}
 	.canvas{width:400px;height:500px;border:1px solid #000;}
 	.operation div{text-align: center}
 	.operation div .middle{visibility:hidden;}
+	@media screen and (max-width: 400px){
+		.canvas{transform:scale(0.79);transform-origin:0 0;}
+	}
 	</style>
 </head>
 <body>
