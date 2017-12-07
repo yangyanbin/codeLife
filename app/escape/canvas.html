@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>H5华容道</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	html,body{margin:0;padding:0;width:100%;height:100vh;}
+	header{padding-top:1px;}
+	header h2{text-align:center;}
+	.canvasDiv{text-align:center;}
+	.canvas{width:400px;height:500px;border:1px solid #000;}
+	.operation div{text-align: center}
+	.operation div .middle{visibility:hidden;}
+	</style>
+</head>
+<body>
+<header><h2 id="name">横刀立马</h2></header>
+<div class="canvasDiv">
+	<canvas id="battlefield" class="canvas" width="400" height="500">请更新浏览器</canvas>
+</div>
+<section class="operation">
+<div><button class="up">上</button></div>
+<div><button class="left">左</button><button class="middle">中</button><button class="right">右</button></div>
+<div><button class="down">下</button></div>
+<div>步数(<span id="step">0</span>)</div>
+</section>
+<button id="restart">重新开始</button>
+<select id="list"></select>
+<script type="text/javascript">
+var canvas = document.getElementById("battlefield")
+var ctx = canvas.getContext("2d");
+/*ctx.beginPath();
+latitude();
+longitude();*/
+function latitude(){
+	for(var i=1;i<4;i++){
+		ctx.moveTo(100*i,0);
+		ctx.lineTo(100*i,500);
+		ctx.closePath();
+		ctx.stroke();
+	}
+}
+function longitude(){
+	for(var i=1;i<5;i++){
+		ctx.moveTo(0,100*i);
+		ctx.lineTo(400,100*i);
+		ctx.closePath();
+		ctx.stroke();
+	}
+}
+
+//横刀立马
+var tactics = {
+	hengdaolima:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,200,200,100,"#e83f16"],
+		huangzhong:[300,200,100,200,"#d0c034"],
+		zhangfei:[0,0,100,200,"#716969"],
+		zhaoyun:[300,0,100,200,"#d886b7"],
+		machao:[0,200,100,200,"#86d895"],
+		jia:[100,300,100,100,"#655757"],
+		yi:[200,300,100,100,"#655757"],
+		bing:[0,400,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"横刀立马"
+	},
+	hengdaolima2:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,200,200,100,"#e83f16"],
+		huangzhong:[300,300,100,200,"#d0c034"],
+		zhangfei:[0,0,100,200,"#716969"],
+		zhaoyun:[300,0,100,200,"#d886b7"],
+		machao:[0,300,100,200,"#86d895"],
+		jia:[100,300,100,100,"#655757"],
+		yi:[200,300,100,100,"#655757"],
+		bing:[0,200,100,100,"#655757"],
+		ding:[300,200,100,100,"#655757"],
+		success:[100,300],
+		zh:"横刀立马2"
+	},
+	qitoubingjin:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,300,200,100,"#e83f16"],
+		huangzhong:[300,300,100,200,"#d0c034"],
+		zhangfei:[0,0,100,200,"#716969"],
+		zhaoyun:[300,0,100,200,"#d886b7"],
+		machao:[0,300,100,200,"#86d895"],
+		jia:[0,200,100,100,"#655757"],
+		yi:[100,200,100,100,"#655757"],
+		bing:[200,200,100,100,"#655757"],
+		ding:[300,200,100,100,"#655757"],
+		success:[100,300],
+		zh:"齐头并进"
+	},
+	chachinanfei:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[0,200,200,100,"#e83f16"],
+		huangzhong:[300,300,100,200,"#d0c034"],
+		zhangfei:[100,300,200,100,"#716969"],
+		zhaoyun:[0,300,100,200,"#d886b7"],
+		machao:[0,0,100,200,"#86d895"],
+		jia:[300,0,100,100,"#655757"],
+		yi:[300,100,100,100,"#655757"],
+		bing:[300,200,100,100,"#655757"],
+		ding:[200,200,100,100,"#655757"],
+		success:[100,300],
+		zh:"插翅难飞"
+	},
+	chachinanfei2:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[200,200,200,100,"#e83f16"],
+		huangzhong:[300,300,100,200,"#d0c034"],
+		zhangfei:[0,400,200,100,"#716969"],
+		zhaoyun:[0,200,100,200,"#d886b7"],
+		machao:[0,0,100,200,"#86d895"],
+		jia:[300,0,100,100,"#655757"],
+		yi:[300,100,100,100,"#655757"],
+		bing:[200,300,100,100,"#655757"],
+		ding:[200,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"插翅难飞2"
+	},
+	chachinanfei3:{
+		caocao:[0,0,200,200,"#000"],
+		guanyu:[200,100,200,100,"#e83f16"],
+		huangzhong:[300,200,100,200,"#d0c034"],
+		zhangfei:[200,400,200,100,"#716969"],
+		zhaoyun:[100,200,100,200,"#d886b7"],
+		machao:[0,200,100,200,"#86d895"],
+		jia:[200,0,100,100,"#655757"],
+		yi:[300,0,100,100,"#655757"],
+		bing:[200,200,100,100,"#655757"],
+		ding:[200,300,100,100,"#655757"],
+		success:[100,300],
+		zh:"插翅难飞3"
+	},
+	hengmadangguan:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[0,200,200,100,"#e83f16"],
+		huangzhong:[300,0,100,200,"#d0c034"],
+		zhangfei:[200,200,200,100,"#716969"],
+		zhaoyun:[0,0,100,200,"#d886b7"],
+		machao:[100,300,100,200,"#86d895"],
+		jia:[0,300,100,100,"#655757"],
+		yi:[0,400,100,100,"#655757"],
+		bing:[300,300,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"横马当关"
+	},
+	hengmadangguan2:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,200,200,100,"#e83f16"],
+		huangzhong:[300,0,100,200,"#d0c034"],
+		zhangfei:[100,300,200,100,"#716969"],
+		zhaoyun:[0,0,100,200,"#d886b7"],
+		machao:[0,200,100,200,"#86d895"],
+		jia:[0,400,100,100,"#655757"],
+		yi:[100,400,100,100,"#655757"],
+		bing:[200,400,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"横马当关2"
+	},
+	jinzaizhichi:{
+		caocao:[200,300,200,200,"#000"],
+		guanyu:[0,200,200,100,"#e83f16"],
+		huangzhong:[200,0,100,200,"#d0c034"],
+		zhangfei:[0,300,200,100,"#716969"],
+		zhaoyun:[100,0,100,200,"#d886b7"],
+		machao:[300,0,100,200,"#86d895"],
+		jia:[0,0,100,100,"#655757"],
+		yi:[0,100,100,100,"#655757"],
+		bing:[200,200,100,100,"#655757"],
+		ding:[300,200,100,100,"#655757"],
+		success:[100,300],
+		zh:"近在咫尺"
+	},
+	cengcengshefang:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,200,200,100,"#e83f16"],
+		huangzhong:[100,400,200,100,"#d0c034"],
+		zhangfei:[100,300,200,100,"#716969"],
+		zhaoyun:[300,0,100,200,"#d886b7"],
+		machao:[0,0,100,200,"#86d895"],
+		jia:[0,200,100,100,"#655757"],
+		yi:[0,300,100,100,"#655757"],
+		bing:[300,200,100,100,"#655757"],
+		ding:[300,300,100,100,"#655757"],
+		success:[100,300],
+		zh:"层层设防"
+	},
+	wengzhongzhibie:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[0,200,200,100,"#e83f16"],
+		huangzhong:[200,200,200,100,"#d0c034"],
+		zhangfei:[100,300,200,100,"#716969"],
+		zhaoyun:[300,0,100,200,"#d886b7"],
+		machao:[0,0,100,200,"#86d895"],
+		jia:[0,300,100,100,"#655757"],
+		yi:[0,400,100,100,"#655757"],
+		bing:[300,300,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"瓮中之鳖"
+	},
+	yushengjianli:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,200,200,100,"#e83f16"],
+		huangzhong:[300,200,100,200,"#d0c034"],
+		zhangfei:[0,0,100,200,"#716969"],
+		zhaoyun:[100,300,100,200,"#d886b7"],
+		machao:[0,200,100,200,"#86d895"],
+		jia:[300,0,100,100,"#655757"],
+		yi:[300,100,100,100,"#655757"],
+		bing:[0,400,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"雨声淅沥"
+	},
+	jiangyongcaoying:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[0,400,200,100,"#e83f16"],
+		huangzhong:[200,200,100,200,"#d0c034"],
+		zhangfei:[0,100,100,200,"#716969"],
+		zhaoyun:[100,200,100,200,"#d886b7"],
+		machao:[300,100,100,200,"#86d895"],
+		jia:[0,300,100,100,"#655757"],
+		yi:[300,300,100,100,"#655757"],
+		bing:[200,400,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"将拥曹营"
+	},
+	zuoyoububing:{
+		caocao:[100,0,200,200,"#000"],
+		guanyu:[100,400,200,100,"#e83f16"],
+		huangzhong:[300,200,100,200,"#d0c034"],
+		zhangfei:[0,200,100,200,"#716969"],
+		zhaoyun:[200,200,100,200,"#d886b7"],
+		machao:[100,200,100,200,"#86d895"],
+		jia:[0,0,100,100,"#655757"],
+		yi:[0,100,100,100,"#655757"],
+		bing:[300,0,100,100,"#655757"],
+		ding:[300,100,100,100,"#655757"],
+		success:[100,300],
+		zh:"左右布兵"
+	},
+	simianchuge:{
+		caocao:[100,100,200,200,"#000"],
+		guanyu:[100,300,200,100,"#e83f16"],
+		huangzhong:[0,300,100,200,"#d0c034"],
+		zhangfei:[300,0,100,200,"#716969"],
+		zhaoyun:[300,200,100,200,"#d886b7"],
+		machao:[0,0,100,200,"#86d895"],
+		jia:[100,0,100,100,"#655757"],
+		yi:[200,0,100,100,"#655757"],
+		bing:[0,200,100,100,"#655757"],
+		ding:[300,400,100,100,"#655757"],
+		success:[100,300],
+		zh:"四面楚歌"
+	}
+}
+var hero = {
+	caocao:"曹操",
+	guanyu:"关羽",
+	zhangfei:"张飞",
+	machao:"马超",
+	zhaoyun:"赵云",
+	huangzhong:"黄忠",
+	jia:"兵甲",
+	yi:"兵乙",
+	bing:"兵丙",
+	ding:"兵丁"
+}
+
+var currTactics = "";
+var currTacticsName = "";
+var step = 0;
+var currSelect = "";
+
+function renderSelect(){
+	var options = "<option disabled value=''>请选择战局</option>";
+	for(var key in tactics){
+		options += "<option value="+key+">"+tactics[key].zh+"</option>";
+	}
+	document.getElementById("list").innerHTML = options;
+}
+function drawTactics(type){
+	type = type&&tactics[type]?type:"hengdaolima";
+	currTactics = JSON.parse(JSON.stringify(tactics[type]));
+	currTacticsName = type;
+	document.getElementById("name").innerHTML = currTactics.zh;
+	step = 0;
+	currSelect = "";
+	addStep();
+	draw();
+}
+function draw(x,y){
+	if(currTactics){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		for(var key in currTactics){
+			if(key!=="success"&&key!=="zh"){
+				var item = currTactics[key];
+				ctx.beginPath();
+				ctx.rect(item[0],item[1],item[2],item[3]);
+				ctx.fillStyle = item[4];
+				ctx.fill();
+				ctx.beginPath();
+				ctx.rect(item[0],item[1],item[2],item[3]);
+				ctx.strokeStyle = "#000";
+				ctx.stroke();
+				ctx.closePath();
+				ctx.font = "20px Courier New"
+				ctx.fillStyle = "#fff";
+				ctx.fillText(hero[key], item[0]+20,item[1]+20);
+				if(typeof x==="number"&&typeof y==="number"&&ctx.isPointInPath(x,y)){
+					currSelect = key;
+				}
+			}
+		}
+		if(currSelect){
+			ctx.font = "20px Courier New"
+			ctx.fillStyle = "#fff";
+			ctx.fillText("伺机而动", currTactics[currSelect][0]+15,currTactics[currSelect][1]+50);
+		}
+	}
+}
+
+function addStep(){
+	document.getElementById("step").innerHTML = step;
+}
+function isMoveAble(dir){
+	moveAble = true;
+	moveItem = currTactics[currSelect];
+	var checkItem;
+	if(dir==="up"||dir==="down"){
+		for(var key in currTactics){
+			if(key!=="success"&&key!=="zh"&&key!==currSelect){
+				checkItem = currTactics[key];
+				if(((moveItem[0]>=checkItem[0]&&moveItem[0]<checkItem[0]+checkItem[2])||(checkItem[0]>moveItem[0]&&checkItem[0]<moveItem[0]+moveItem[2]))){
+					if((moveItem[1]>=checkItem[1]&&moveItem[1]<checkItem[1]+checkItem[3])||(checkItem[1]>moveItem[1]&&checkItem[1]<moveItem[1]+moveItem[3])){
+						moveAble = false;
+						console.log(key,currSelect,"狭路相逢");
+						return moveAble;
+					}
+				}
+			}
+		}
+	}else if(dir==="right"||dir==="left"){
+		for(var key in currTactics){
+			if(key!=="success"&&key!=="zh"&&key!==currSelect){
+				checkItem = currTactics[key];
+				if(((moveItem[1]>=checkItem[1]&&moveItem[1]<checkItem[1]+checkItem[3])||(checkItem[1]>moveItem[1]&&checkItem[1]<moveItem[1]+moveItem[3]))){
+					if((moveItem[0]>=checkItem[0]&&moveItem[0]<checkItem[0]+checkItem[2])||(checkItem[0]>moveItem[0]&&checkItem[0]<moveItem[0]+moveItem[2])){
+						moveAble = false;
+						console.log(key,currSelect,"狭路相逢");
+						return moveAble;
+					}
+				}
+			}
+		}
+	}
+	return moveAble;
+}
+function checkSuccess(){
+	if(currTactics.caocao[0]===currTactics.success[0]&&currTactics.caocao[1]===currTactics.success[1]){
+		alert("逃出生天");
+	}
+}
+
+drawTactics("hengdaolima");
+renderSelect();
+
+document.getElementsByClassName("operation")[0].addEventListener("click",function(e){
+	var target = e.target;
+	if(target.tagName === "BUTTON"&&currSelect){
+		switch (target.className){
+			case "up":
+				currTactics[currSelect][1] = currTactics[currSelect][1]-100;
+				if(currTactics[currSelect][1]>=0){
+					if(isMoveAble("up")){
+						draw();
+						step++;
+					}else{
+						currTactics[currSelect][1] = currTactics[currSelect][1]+100;
+					}
+				}else{
+					currTactics[currSelect][1] = 0;
+				}
+				break;
+			case "down":
+				currTactics[currSelect][1] = currTactics[currSelect][1]+100;
+				if((currTactics[currSelect][3]===100&&currTactics[currSelect][1]<=400)
+					||(currTactics[currSelect][3]===200&&currTactics[currSelect][1]<=300)){
+					if(isMoveAble("down")){
+						draw();
+						step++;
+					}else{
+						currTactics[currSelect][1] = currTactics[currSelect][1]-100;
+					}
+				}else{
+					currTactics[currSelect][1] = currTactics[currSelect][3]===100?400:300
+				}
+				break;
+			case "left":
+				currTactics[currSelect][0] = currTactics[currSelect][0]-100;
+				if(currTactics[currSelect][0]>=0){
+					if(isMoveAble("left")){
+						draw();
+						step++;
+					}else{
+						currTactics[currSelect][0] = currTactics[currSelect][0]+100;
+					}
+				}else{
+					currTactics[currSelect][0] = 0;
+				}
+				break;
+			case "right":
+				currTactics[currSelect][0] = currTactics[currSelect][0]+100;
+				if((currTactics[currSelect][2]===100&&currTactics[currSelect][0]<=300)
+					||(currTactics[currSelect][2]===200&&currTactics[currSelect][0]<=200)){
+					if(isMoveAble("right")){
+						draw();
+						step++;
+					}else{
+						currTactics[currSelect][0] = currTactics[currSelect][0]-100;
+					}
+				}else{
+					currTactics[currSelect][0] = currTactics[currSelect][2]===100?300:200;
+				}
+				break;
+			default:break;
+		}
+		addStep();
+		setTimeout(function(){
+			checkSuccess();
+		},16);
+	}
+},true);
+document.getElementById("battlefield").addEventListener("click",function(e){
+	draw(e.offsetX,e.offsetY);
+});
+document.getElementById("restart").addEventListener("click",function(){
+	drawTactics(currTacticsName);
+});
+document.getElementById("list").addEventListener("change",function(){
+	drawTactics(this.value);
+});
+</script>
+</body>
+</html>
