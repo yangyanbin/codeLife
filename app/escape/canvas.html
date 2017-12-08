@@ -11,14 +11,14 @@
 	header h2{text-align:center;}
 	.canvasDiv{text-align:center;width:100%;overflow-x:hidden;}
 	.canvas{width:400px;height:500px;border:1px solid #000;}
-	.operation{margin-top:50px;}
+	.operation{margin-top:25px;}
 	.operation div{text-align: center}
 	.operation div .middle{visibility:hidden;}
 	.operation div button{padding:0 10px;}
 	.menu{padding:20px;}
 	@media screen and (max-width: 400px){
 		.canvas{transform:scale(0.79);transform-origin:0 0;}
-		.operation{margin-top:-60px;}
+		.operation{margin-top:-80px;}
 	}
 	</style>
 </head>
@@ -312,7 +312,7 @@ function drawTactics(type){
 	currSelect = "";
 	addStep();
 	draw();
-	document.body.scrollTop = 0;
+	document.body.scrollTop = 1;
 }
 function draw(x,y){
 	if(currTactics){
