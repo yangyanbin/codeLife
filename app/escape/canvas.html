@@ -12,8 +12,10 @@
 	.canvas{width:400px;height:500px;border:1px solid #000;}
 	.operation div{text-align: center}
 	.operation div .middle{visibility:hidden;}
+	.menu{padding:20px;}
 	@media screen and (max-width: 400px){
 		.canvas{transform:scale(0.79);transform-origin:0 0;}
+		section{margin-top:-100px;}
 	}
 	</style>
 </head>
@@ -28,8 +30,10 @@
 <div><button class="down">下</button></div>
 <div>步数(<span id="step">0</span>)</div>
 </section>
-<button id="restart">重新开始</button>
-<select id="list"></select>
+<div class="menu">
+	<button id="restart">重新开始</button>
+	<select id="list"></select>
+</div>
 <script type="text/javascript">
 var canvas = document.getElementById("battlefield")
 var ctx = canvas.getContext("2d");
