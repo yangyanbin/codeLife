@@ -290,6 +290,7 @@ var currTactics = "";
 var currTacticsName = "";
 var step = 0;
 var currSelect = "";
+var success = false;
 
 function renderSelect(){
 	var options = "<option disabled value=''>请选择战局</option>";
@@ -310,6 +311,7 @@ function drawTactics(type){
 	},1000);
 	step = 0;
 	currSelect = "";
+	success = false;
 	addStep();
 	draw();
 	document.body.scrollTop = 1;
@@ -383,6 +385,7 @@ function isMoveAble(dir){
 }
 function checkSuccess(){
 	if(currTactics.caocao[0]===currTactics.success[0]&&currTactics.caocao[1]===currTactics.success[1]){
+		success = true;
 		alert("逃出生天");
 	}
 }
@@ -400,7 +403,7 @@ renderSelect();
 
 document.getElementsByClassName("operation")[0].addEventListener("click",function(e){
 	var target = e.target;
-	if(target.tagName === "BUTTON"&&currSelect){
+	if(target.tagName === "BUTTON"&&currSelect&&!success){
 		switch (target.className){
 			case "up":
 				currTactics[currSelect][1] = currTactics[currSelect][1]-100;
