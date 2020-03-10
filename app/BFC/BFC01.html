@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+	<title>流式布局</title>
+	<style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .father {
+      height: 400px;
+      background-color: pink;
+    }
+    .left {
+      height: 300px;
+      width: 200px;
+      background-color: orange;
+      float: left;
+    }
+    .right {
+      height: 350px;
+      background-color: blue;
+      /* 触发了bfc的盒子, 不与浮动的元素重叠 */
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<div class="father">
+    <div class="left"></div>
+    <div class="right"></div>
+</div>
+<script type="text/javascript">
+console.log('同理可以设置三栏布局')
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grid 布局</title>
+	<meta charset="utf-8">
+	<meta name="keywords" content="css3,Grid布局">
+	<meta name="description" content="练习grid布局">
+	<style type="text/css">
+	body{margin:0;padding:0;}
+	ul{list-style:none;margin:0 0 20px 0;padding:0;border:1px solid #000;}
+	ul li{margin:5px 5px 0 0;}
+	li.item1{background:#6C9;}
+	li.item2{background:#6CC;}
+	li.item3{background:#E6CC6E;}
+	li.item4{background:#37A7FF;}
+	li.item5{background:#F99;}
+	li.item6{background:#F96;}
+
+	.wrapper1{
+		display:grid;
+		grid-template-columns:100px 100px 100px;
+		grid-template-rows:50px 50px;
+	}
+
+	</style>
+</head>
+<body>
+<ul class="wrapper1">
+<li class="item1"></li>
+<li class="item2"></li>
+<li class="item3"></li>
+<li class="item4"></li>
+<li class="item5"></li>
+<li class="item6"></li>
+</ul>
+</body>
+</html>
