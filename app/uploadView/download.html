@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>上传预览</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	.addFile{
+		width:100px;
+		height:100px;
+		position:relative;
+		background:#e2e2e2;
+		border:1px solid #666;
+	}
+	.addFile:before{
+		content:"";
+		position:absolute;
+		display:block;
+		width:20px;
+		height:2px;
+		background:#000;
+		top:49px;
+		left:40px;
+	}
+	.addFile:after{
+		content:"";
+		position:absolute;
+		display:block;
+		width:2px;
+		height:20px;
+		background:#000;
+		top:40px;
+		left:49px;
+	}
+	.addFile input{
+		width:0;
+		height:0;
+		border:none;
+		outline:none;
+	}
+	#view img{
+		max-width:200px;
+		max-height:200px;
+		margin:10px;
+	}
+	</style>
+</head>
+<body>
+<button type='button' id='download'>通过blob下载文件</button>
+<script type="text/javascript">
+document.querySelector("#download").addEventListener("click",function(e){
+	const testJson = {
+		keyWords:'测试前端下载文件'
+	};
+	const str = JSON.stringify(testJson,null,'\t');
+	const blob = new Blob([str],{type:'application/json'}); //传入合适的MIME或不传
+	const fileName = 'test.json';
+	if('msSaveBlob' in navigator){ //ie
+		navigator.msSaveBlob(blob,fileName);
+	}else{
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.download = fileName;
+		a.style.display = 'none';
+		a.href = url;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url); //释放url对象
+	}
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DVA</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<h2>DVA用法</h2>
+<h4>1.初始化</h4>
+<pre>
+import createLogger from 'redux-logger';
+import { browserHistory , useRouterHistory} from 'dva/router';
+import { createHashHistory } from 'history';
+
+const app = new dva({
+	//Middleware
+	onAction:createLogger() | [createLogger()] ,
+	//history
+	history:browserHistory | useRouterHistory(createHashHistory) ,
+	//Effect / Subscriptions  Error
+	onError(e, dispatch) {
+	  console.log(e.message);
+    }
+});
+</pre>
+<h4>2.基于 action 进行页面跳转</h4>
+<pre>
+import { routerRedux } from 'dva/router';
+
+// Inside Effects
+yield put(routerRedux.push('/logout'));
+
+// Outside Effects
+dispatch(routerRedux.push('/logout'));
+
+// With query
+routerRedux.push({
+  pathname: '/logout',
+  query: {
+    page: 2,
+  },
+});
+</pre>
+</body>
+</html>
