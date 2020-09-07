@@ -7,49 +7,62 @@
 </head>
 
 <body>
-<script type="text/javascript">
-	/*闭包，defineProperty*/
-    var foo = function() {
-        var o = {
-            a: 1,
-            b: 2,
-            /**更多属性**/
-        };
-        return function(key) {
-            // var tt = (o[key] = 2333);
-            var tt = o[key];
-            return tt;
-        }
+<pre>
+/*闭包，defineProperty*/
+var foo = function() {
+    var o = {
+        a: 1,
+        b: 2,
+        /**更多属性**/
     };
-    //不改变上述代码，获取对象o的所有属性
-    var fooFun = foo();
-    var key = Symbol();//保证key独一无二，才能在取值时追溯到原型
-    Object.defineProperty(Object.prototype, key, {
-    	get() {
-    		console.log("正在获取对象的值");
-            return this;
-        },
-        set(v) {
-        	console.log("正在给对象赋值%s",v);
-            return this;
-        }
-    });
-    var o = fooFun(key);
-    console.log(Object.keys(o));
-    /*var a = {};
-    Object.defineProperty(a, "a", {
-    	get:function() {
-    		console.log("正在获取对象的值");
-            return this;
-        },
-        set:function(v) {
-        	console.log("正在给对象赋值%s",v);
-            return this;
-        }
-    });
-    a.a = 5;
-    var b = a.a;*/
-</script>
+    return function(key) {
+        // var tt = (o[key] = 2333);
+        var tt = o[key];
+        return tt;
+    }
+};
+//不改变上述代码，获取对象o的所有属性
+var fooFun = foo();
+var key = Symbol();//保证key独一无二，才能在取值时追溯到原型
+Object.defineProperty(Object.prototype, key, {
+	get() {
+		console.log("正在获取对象的值");
+        return this;
+    },
+    set(v) {
+    	console.log("正在给对象赋值%s",v);
+        return this;
+    }
+});
+var o = fooFun(key);
+console.log(Object.keys(o));
+/*var a = {};
+Object.defineProperty(a, "a", {
+	get:function() {
+		console.log("正在获取对象的值");
+        return this;
+    },
+    set:function(v) {
+    	console.log("正在给对象赋值%s",v);
+        return this;
+    }
+});
+a.a = 5;
+var b = a.a;*/
+
+//账户金额添加每隔三位添加分隔符
+//添加参数固定两位小数
+//同时也可以固定整数长度，不够时以0补充
+Number(total).toLocaleString('en-us', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+//不需要小数或自带小数，直接调用方法
+Number(total).toLocaleString();
+//修改浏览器只读对象属性
+Object.defineProperty(navigator,'userAgent',{get:function(){return '';}});
+
+//禁止浏览器表单自动填充，在表单第一行添加 
+<!--<input type='password' autocomplete='new-password' hidden />-->
+
+</pre>
 </body>
 
 </html>
