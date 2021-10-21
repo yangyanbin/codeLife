@@ -45,6 +45,8 @@ const {Provider, Consumer} = React.createContext(defaultProps)
     const defaultValue = React.useContext(AppContext);
 ```
 > ps:通过useContext和useReducer来达到redux的效果
+> useEffect中函数返回值为销毁函数，处理一些清除或解绑动作，非必要
 > react hooks使用规则：只能在function组件中使用，必须在function组件根作用域中使用，不要包含在if中
+> useReducer作为useState的替代方案，更适合于复杂业务
 
     

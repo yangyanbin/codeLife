@@ -17,7 +17,7 @@
 	.operation div button{padding:0 10px;}
 	.menu{padding:20px;}
 	@media screen and (max-width: 400px){
-		.canvas{transform:scale(0.79);transform-origin:0 0;}
+		.canvas{transform:scale(0.79);transform-origin:33% 0;}
 		.operation{margin-top:-80px;}
 	}
 	</style>
@@ -27,7 +27,7 @@
 <div class="canvasDiv">
 	<canvas id="battlefield" class="canvas" width="400" height="500">请更新浏览器</canvas>
 </div>
-<section class="operation">
+<section class="operation" style="display:none">
 <div><button class="up">上</button></div>
 <div><button class="left">左</button><button class="middle">中</button><button class="right">右</button></div>
 <div><button class="down">下</button></div>
@@ -36,6 +36,7 @@
 <div class="menu">
 	<button id="restart">重新开始</button>
 	<select id="list"></select>
+	<span>步数(<b id="step1"></b>)</span>
 </div>
 <script type="text/javascript">
 var canvas = document.getElementById("battlefield")
@@ -317,6 +318,7 @@ function drawTactics(type){
 	document.body.scrollTop = 1;
 }
 function draw(x,y){
+	var isSelectHero = false;
 	if(currTactics){
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		for(var key in currTactics){
@@ -336,19 +338,34 @@ function draw(x,y){
 				ctx.fillText(hero[key], item[0]+20,item[1]+20);
 				if(typeof x==="number"&&typeof y==="number"&&ctx.isPointInPath(x,y)){
 					currSelect = key;
+					isSelectHero = true;
 				}
 			}
 		}
+		//重新选择将士
 		if(currSelect){
 			ctx.font = "20px Courier New"
 			ctx.fillStyle = "#fff";
 			ctx.fillText("伺机而动", currTactics[currSelect][0]+15,currTactics[currSelect][1]+50);
+		}
+		if(currSelect&&!isSelectHero){
+			//选择移动方向
+			if(x<currTactics[currSelect][0]){
+				move('left');
+			}else if(y<currTactics[currSelect][1]){
+				move('up');
+			}else if(y>currTactics[currSelect][1]+currTactics[currSelect][3]){
+				move('down');
+			}else if(x>currTactics[currSelect][0]+currTactics[currSelect][2]){
+				move('right');
+			}
 		}
 	}
 }
 
 function addStep(){
 	document.getElementById("step").innerHTML = step;
+	document.getElementById("step1").innerHTML = step;
 }
 function isMoveAble(dir){
 	moveAble = true;
@@ -401,70 +418,74 @@ function displayHeader(bl){
 drawTactics("hengdaolima");
 renderSelect();
 
+function move(direction){
+	switch (direction){
+		case "up":
+			currTactics[currSelect][1] = currTactics[currSelect][1]-100;
+			if(currTactics[currSelect][1]>=0){
+				if(isMoveAble("up")){
+					draw();
+					step++;
+				}else{
+					currTactics[currSelect][1] = currTactics[currSelect][1]+100;
+				}
+			}else{
+				currTactics[currSelect][1] = 0;
+			}
+			break;
+		case "down":
+			currTactics[currSelect][1] = currTactics[currSelect][1]+100;
+			if((currTactics[currSelect][3]===100&&currTactics[currSelect][1]<=400)
+				||(currTactics[currSelect][3]===200&&currTactics[currSelect][1]<=300)){
+				if(isMoveAble("down")){
+					draw();
+					step++;
+				}else{
+					currTactics[currSelect][1] = currTactics[currSelect][1]-100;
+				}
+			}else{
+				currTactics[currSelect][1] = currTactics[currSelect][3]===100?400:300
+			}
+			break;
+		case "left":
+			currTactics[currSelect][0] = currTactics[currSelect][0]-100;
+			if(currTactics[currSelect][0]>=0){
+				if(isMoveAble("left")){
+					draw();
+					step++;
+				}else{
+					currTactics[currSelect][0] = currTactics[currSelect][0]+100;
+				}
+			}else{
+				currTactics[currSelect][0] = 0;
+			}
+			break;
+		case "right":
+			currTactics[currSelect][0] = currTactics[currSelect][0]+100;
+			if((currTactics[currSelect][2]===100&&currTactics[currSelect][0]<=300)
+				||(currTactics[currSelect][2]===200&&currTactics[currSelect][0]<=200)){
+				if(isMoveAble("right")){
+					draw();
+					step++;
+				}else{
+					currTactics[currSelect][0] = currTactics[currSelect][0]-100;
+				}
+			}else{
+				currTactics[currSelect][0] = currTactics[currSelect][2]===100?300:200;
+			}
+			break;
+		default:break;
+	}
+	addStep();
+	setTimeout(function(){
+		checkSuccess();
+	},16);
+}
+
 document.getElementsByClassName("operation")[0].addEventListener("click",function(e){
 	var target = e.target;
 	if(target.tagName === "BUTTON"&&currSelect&&!success){
-		switch (target.className){
-			case "up":
-				currTactics[currSelect][1] = currTactics[currSelect][1]-100;
-				if(currTactics[currSelect][1]>=0){
-					if(isMoveAble("up")){
-						draw();
-						step++;
-					}else{
-						currTactics[currSelect][1] = currTactics[currSelect][1]+100;
-					}
-				}else{
-					currTactics[currSelect][1] = 0;
-				}
-				break;
-			case "down":
-				currTactics[currSelect][1] = currTactics[currSelect][1]+100;
-				if((currTactics[currSelect][3]===100&&currTactics[currSelect][1]<=400)
-					||(currTactics[currSelect][3]===200&&currTactics[currSelect][1]<=300)){
-					if(isMoveAble("down")){
-						draw();
-						step++;
-					}else{
-						currTactics[currSelect][1] = currTactics[currSelect][1]-100;
-					}
-				}else{
-					currTactics[currSelect][1] = currTactics[currSelect][3]===100?400:300
-				}
-				break;
-			case "left":
-				currTactics[currSelect][0] = currTactics[currSelect][0]-100;
-				if(currTactics[currSelect][0]>=0){
-					if(isMoveAble("left")){
-						draw();
-						step++;
-					}else{
-						currTactics[currSelect][0] = currTactics[currSelect][0]+100;
-					}
-				}else{
-					currTactics[currSelect][0] = 0;
-				}
-				break;
-			case "right":
-				currTactics[currSelect][0] = currTactics[currSelect][0]+100;
-				if((currTactics[currSelect][2]===100&&currTactics[currSelect][0]<=300)
-					||(currTactics[currSelect][2]===200&&currTactics[currSelect][0]<=200)){
-					if(isMoveAble("right")){
-						draw();
-						step++;
-					}else{
-						currTactics[currSelect][0] = currTactics[currSelect][0]-100;
-					}
-				}else{
-					currTactics[currSelect][0] = currTactics[currSelect][2]===100?300:200;
-				}
-				break;
-			default:break;
-		}
-		addStep();
-		setTimeout(function(){
-			checkSuccess();
-		},16);
+		move(target.className);
 	}
 },true);
 document.getElementById("battlefield").addEventListener("click",function(e){
