@@ -14,15 +14,42 @@
 <section>
 <h2>测试mobile失焦</h2>
 <select id="allowFocusSelect" value="Y">
-<option value="Y">Allow Focuw</option>
-<option value="N">Not Allow Focuw</option>
+<option value="Y">Allow Focus</option>
+<option value="N">Not Allow Focus</option>
 </select>
-<input type="text" name="touchStart" ontouchstart="inputTouchStart(event)" />
+<input type="text" name="touchStart" ontouchstart="inputTouchStart(event)" ontouchend="inputTouchEnd(event)" onclick="inputClick(event)" onfocus="inputFocus(event)"/>
 <script type="text/javascript">
+/*比较神奇的一点
+ * 当触摸点大部分在input中时，会先触发touchstart事件，然后触发focus事件，这时候touchstart中阻止后续事件可以正常阻止
+ * 当触摸点大部分在input外时，通俗理解为点击input的边框时，在某些浏览器因为cancelable=false的原因导致无法正常阻止后续事件，在某些时刻会先去触发focus事件
+*/
 function inputTouchStart(e){
+    console.log('touchStart',e);
+    // var afs = document.querySelector('#allowFocusSelect');
+    // if(afs.value==='N'){
+    //     return e.preventDefault();
+    // }
+}
+function inputTouchEnd(e){
+    // console.log('touchEnd',e);
+    // var afs = document.querySelector('#allowFocusSelect');
+    // if(afs.value==='N'){
+    //     return e.preventDefault();
+    // }
+}
+function inputClick(e){
+    console.log('click',e);
     var afs = document.querySelector('#allowFocusSelect');
     if(afs.value==='N'){
-        event.preventDefault();
+        // return e.preventDefault();
+    }
+}
+function inputFocus(e){
+    console.log('focus',e);
+    var afs = document.querySelector('#allowFocusSelect');
+    if(afs.value==='N'){
+        // e.target.blur();
+        // return e.preventDefault();
     }
 }
 </script>
